@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category index
+{% endblock %}
+
+{% block body %}
+	<h1>Bienvenue dans votre espace personnel
+		<br>
+		Quelle catégorie souhaitez-vous ?
+	</h1>
+	<div class="container">
+		{% if app.user %}
+		<div class="blocContainer p-1">
+			{% set links = [] %}
+			{% set links = links|merge(
+					[
+						{
+							'label': 'Mes favoris',
+							'path': path('app_favoris'),
+							'img': asset('build/images/categories-blocs/favoris.svg')
+						}
+					]
+				)
+			%}
+			{% endif %}
+			{% for category in categories %}
+				{%	set links = links|merge(
+						[
+							{
+								'label': category.label,
+								'path': path('category_level_show', {'slug': category.slug}),
+								'img': asset('build/images/categories-blocs/' ~ category.image)
+							}
+						]
+					)
+				%}
+			{% endfor %}
+			{%	set links = links|merge(
+					[
+						{
+							'label': 'Rechercher un tuto',
+							'path': path('app_tutoriel_search'),
+							'img': asset('build/images/categories-blocs/search.svg')
+						}
+					]
+				)
+			%}
+			{% for link in links %}
+				<a class="blockItems text-decoration-none" href="{{ link.path }}">
+					<div class="d-flex align-items-center flex-column h-100 justify-content-center gap-4">
+						<img class="categorySvg" src="{{ link.img }}">
+						<p class="categoryTitle">{{link.label}}</p>
+					</div>
+				</a>
+			{% endfor %}
+
+		</div>
+	</div>
+{% endblock %}
